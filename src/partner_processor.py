@@ -40,7 +40,9 @@ class DataProcessor:
 
     def generate_json_output(self):
         # Business logic to generate json goes here json_valid_output and json_error_output generated here
+        # Logic is to filter out all records that have a valid order_reference and customer_reference and later perform an aggrgation on top of that
         orders_missing_customer_reference_df = orders_df[~orders_df['customer_reference'].isin(customers_df['customer_reference'].tolist())][['order_reference']]
+        # Add uuid for keying purposes
         orders_missing_customer_reference_df['uuid'] = [uuid.uuid4() for _ in range(len(orders_missing_customer_reference_df.index))]
         orders_missing_customer_reference_df['type'] = 'error_message'
         orders_missing_customer_reference_df['customer_reference'] =  None
